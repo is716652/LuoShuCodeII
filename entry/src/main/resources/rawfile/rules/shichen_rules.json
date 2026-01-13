@@ -1,0 +1,14 @@
+[
+  {"index": 0, "name": "子时", "zhi": "子", "timeRange": "23:00-01:00", "alias": "夜半"},
+  {"index": 1, "name": "丑时", "zhi": "丑", "timeRange": "01:00-03:00", "alias": "鸡鸣"},
+  {"index": 2, "name": "寅时", "zhi": "寅", "timeRange": "03:00-05:00", "alias": "平旦"},
+  {"index": 3, "name": "卯时", "zhi": "卯", "timeRange": "05:00-07:00", "alias": "日出"},
+  {"index": 4, "name": "辰时", "zhi": "辰", "timeRange": "07:00-09:00", "alias": "食时"},
+  {"index": 5, "name": "巳时", "zhi": "巳", "timeRange": "09:00-11:00", "alias": "隅中"},
+  {"index": 6, "name": "午时", "zhi": "午", "timeRange": "11:00-13:00", "alias": "日中"},
+  {"index": 7, "name": "未时", "zhi": "未", "timeRange": "13:00-15:00", "alias": "日昳"},
+  {"index": 8, "name": "申时", "zhi": "申", "timeRange": "15:00-17:00", "alias": "哺时"},
+  {"index": 9, "name": "酉时", "zhi": "酉", "timeRange": "17:00-19:00", "alias": "日入"},
+  {"index": 10, "name": "戌时", "zhi": "戌", "timeRange": "19:00-21:00", "alias": "黄昏"},
+  {"index": 11, "name": "亥时", "zhi": "亥", "timeRange": "21:00-23:00", "alias": "人定"}
+]

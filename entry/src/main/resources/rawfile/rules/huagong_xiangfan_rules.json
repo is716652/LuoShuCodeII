@@ -1,0 +1,61 @@
+{
+  "description": "化工相反之图 - 判断生年元气是否失令（气场错频）",
+  "principle": "反局讲的是'逆'，逆乱天时。若生年元气符合反局特征，意味着先天气场与大自然节奏错频。",
+  "xiangfan_rules": [
+    {
+      "gua": ["乾"],
+      "element": "金",
+      "type": "四季篡位",
+      "months": ["丑", "辰", "未", "戌"],
+      "days": 18,
+      "zheng_element": "土",
+      "desc": "金多土虚 - 四季末本该土旺，乾金反客为主",
+      "symptom": "性格过于刚烈刻薄，缺乏包容心，或脑胃问题"
+    },
+    {
+      "gua": ["坎"],
+      "element": "水",
+      "type": "节气错乱",
+      "start_jieqi": "夏至",
+      "end_jieqi": "白露",
+      "zheng_element": "火",
+      "desc": "夏日水泛 - 夏天本该火旺，坎水却反旺",
+      "symptom": "水火相冲，主官非、破财、心肾疾病"
+    },
+    {
+      "gua": ["离"],
+      "element": "火",
+      "type": "节气错乱",
+      "start_jieqi": "冬至",
+      "end_jieqi": "惊蛰",
+      "zheng_element": "水",
+      "desc": "冬日火烧 - 冬天本该水旺，离火却反旺",
+      "symptom": "燥气攻心，主性格暴躁、心血系统疾病"
+    },
+    {
+      "gua": ["兑"],
+      "element": "金",
+      "type": "节气错乱",
+      "start_jieqi": "春分",
+      "end_jieqi": "芒种",
+      "zheng_element": "木",
+      "desc": "春行秋令 - 春天本该木旺，兑金却反旺",
+      "symptom": "损伤生机，主做事半途而废、呼吸系统疾病"
+    },
+    {
+      "gua": ["震", "巽"],
+      "element": "木",
+      "type": "节气错乱",
+      "start_jieqi": "秋分",
+      "end_jieqi": "大雪",
+      "zheng_element": "金",
+      "desc": "秋行春令 - 秋天本该金旺，震木却反旺",
+      "symptom": "逆势而为，主劳而无功、筋骨受伤"
+    }
+  ],
+  "shiling_results": [
+    {"type": "失令", "luck": "凶", "desc": "元气被克，运势受压"},
+    {"type": "犯旺", "luck": "大凶", "desc": "气场错频，人生多波折"},
+    {"type": "盗气", "luck": "凶", "desc": "元气被泄，耗损严重"}
+  ]
+}

@@ -1,0 +1,14 @@
+[
+  {"zhi": "子", "direction": "北", "gua": "坎", "degree": "0°"},
+  {"zhi": "丑", "direction": "东北偏北", "gua": "艮", "degree": "30°"},
+  {"zhi": "寅", "direction": "东北偏东", "gua": "艮", "degree": "60°"},
+  {"zhi": "卯", "direction": "东", "gua": "震", "degree": "90°"},
+  {"zhi": "辰", "direction": "东南偏东", "gua": "巽", "degree": "120°"},
+  {"zhi": "巳", "direction": "东南偏南", "gua": "巽", "degree": "150°"},
+  {"zhi": "午", "direction": "南", "gua": "离", "degree": "180°"},
+  {"zhi": "未", "direction": "西南偏南", "gua": "坤", "degree": "210°"},
+  {"zhi": "申", "direction": "西南偏西", "gua": "坤", "degree": "240°"},
+  {"zhi": "酉", "direction": "西", "gua": "兑", "degree": "270°"},
+  {"zhi": "戌", "direction": "西北偏西", "gua": "乾", "degree": "300°"},
+  {"zhi": "亥", "direction": "西北偏北", "gua": "乾", "degree": "330°"}
+]

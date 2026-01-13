@@ -1,0 +1,129 @@
+{
+  "description": "成卦法规则 - 包含正统成卦法(A法)和年干起卦法(B法)",
+  
+  "luoshu_gua_map": {
+    "description": "洛书九宫配卦，数字对应八卦",
+    "mapping": {
+      "1": {"gua": "坎", "symbol": "☵", "element": "水"},
+      "2": {"gua": "坤", "symbol": "☷", "element": "土"},
+      "3": {"gua": "震", "symbol": "☳", "element": "木"},
+      "4": {"gua": "巽", "symbol": "☴", "element": "木"},
+      "5": {"gua": "寄坤", "symbol": "☷", "element": "土"},
+      "6": {"gua": "乾", "symbol": "☰", "element": "金"},
+      "7": {"gua": "兑", "symbol": "☱", "element": "金"},
+      "8": {"gua": "艮", "symbol": "☶", "element": "土"},
+      "9": {"gua": "离", "symbol": "☲", "element": "火"},
+      "0": {"gua": "坤", "symbol": "☷", "element": "土"}
+    }
+  },
+  
+  "niangan_gua_map": {
+    "description": "年干起卦口诀：壬甲从乾起，乙癸向坤求；庚来震上坐，辛出巽方游；丙向艮门立，己取离为头；戊从坎位数，丁在兑家留。",
+    "mapping": {
+      "甲": {"gua": "乾", "symbol": "☰", "yinyang": "阳"},
+      "乙": {"gua": "坤", "symbol": "☷", "yinyang": "阴"},
+      "丙": {"gua": "艮", "symbol": "☶", "yinyang": "阳"},
+      "丁": {"gua": "兑", "symbol": "☱", "yinyang": "阴"},
+      "戊": {"gua": "坎", "symbol": "☵", "yinyang": "阳"},
+      "己": {"gua": "离", "symbol": "☲", "yinyang": "阴"},
+      "庚": {"gua": "震", "symbol": "☳", "yinyang": "阳"},
+      "辛": {"gua": "巽", "symbol": "☴", "yinyang": "阴"},
+      "壬": {"gua": "乾", "symbol": "☰", "yinyang": "阳"},
+      "癸": {"gua": "坤", "symbol": "☷", "yinyang": "阴"}
+    }
+  },
+  
+  "gua_yao": {
+    "description": "八卦爻象，从下到上",
+    "data": {
+      "乾": [1, 1, 1],
+      "坤": [0, 0, 0],
+      "震": [1, 0, 0],
+      "巽": [0, 1, 1],
+      "坎": [0, 1, 0],
+      "离": [1, 0, 1],
+      "艮": [0, 0, 1],
+      "兑": [1, 1, 0]
+    }
+  },
+  
+  "chonggua_64": {
+    "description": "64卦速查表，键为'上卦-下卦'",
+    "data": {
+      "乾-乾": {"name": "乾为天", "unicode": "䷀", "meaning": "刚健中正，自强不息"},
+      "坤-坤": {"name": "坤为地", "unicode": "䷁", "meaning": "厚德载物，顺承天时"},
+      "坎-震": {"name": "水雷屯", "unicode": "䷂", "meaning": "万事开头难，宜守不宜进"},
+      "艮-坎": {"name": "山水蒙", "unicode": "䷃", "meaning": "启蒙教化，渐进修行"},
+      "坎-乾": {"name": "水天需", "unicode": "䷄", "meaning": "等待时机，养精蓄锐"},
+      "乾-坎": {"name": "天水讼", "unicode": "䷅", "meaning": "争讼之象，宜和解"},
+      "坤-坎": {"name": "地水师", "unicode": "䷆", "meaning": "统帅众人，纪律严明"},
+      "坎-坤": {"name": "水地比", "unicode": "䷇", "meaning": "亲比和睦，结盟互助"},
+      "巽-乾": {"name": "风天小畜", "unicode": "䷈", "meaning": "积小成大，蓄势待发"},
+      "乾-兑": {"name": "天泽履", "unicode": "䷉", "meaning": "循礼而行，如履薄冰"},
+      "坤-乾": {"name": "地天泰", "unicode": "䷊", "meaning": "天地交泰，万物通达"},
+      "乾-坤": {"name": "天地否", "unicode": "䷋", "meaning": "闭塞不通，守正待时"},
+      "乾-离": {"name": "天火同人", "unicode": "䷌", "meaning": "志同道合，和谐共处"},
+      "离-乾": {"name": "火天大有", "unicode": "䷍", "meaning": "大有收获，光明正大"},
+      "坤-艮": {"name": "地山谦", "unicode": "䷎", "meaning": "谦虚受益，卑以自牧"},
+      "震-坤": {"name": "雷地豫", "unicode": "䷏", "meaning": "和乐之象，顺势而为"},
+      "兑-震": {"name": "泽雷随", "unicode": "䷐", "meaning": "随顺时势，因时制宜"},
+      "艮-巽": {"name": "山风蛊", "unicode": "䷑", "meaning": "整顿改革，振作有为"},
+      "坤-兑": {"name": "地泽临", "unicode": "䷒", "meaning": "居高临下，教化众人"},
+      "巽-坤": {"name": "风地观", "unicode": "䷓", "meaning": "观察审视，以静制动"},
+      "离-震": {"name": "火雷噬嗑", "unicode": "䷔", "meaning": "刑法严明，除暴安良"},
+      "艮-离": {"name": "山火贲", "unicode": "䷕", "meaning": "文饰修养，内实外华"},
+      "艮-坤": {"name": "山地剥", "unicode": "䷖", "meaning": "剥落衰败，顺时而止"},
+      "坤-震": {"name": "地雷复", "unicode": "䷗", "meaning": "一阳来复，万象更新"},
+      "乾-震": {"name": "天雷无妄", "unicode": "䷘", "meaning": "无妄之灾，守正不乱"},
+      "艮-乾": {"name": "山天大畜", "unicode": "䷙", "meaning": "蓄德载物，厚积薄发"},
+      "艮-震": {"name": "山雷颐", "unicode": "䷚", "meaning": "颐养之道，慎言节食"},
+      "兑-巽": {"name": "泽风大过", "unicode": "䷛", "meaning": "非常之时，果断行事"},
+      "坎-坎": {"name": "坎为水", "unicode": "䷜", "meaning": "重重险阻，心诚则通"},
+      "离-离": {"name": "离为火", "unicode": "䷝", "meaning": "光明正大，柔顺依附"},
+      "兑-艮": {"name": "泽山咸", "unicode": "䷞", "meaning": "感应交通，婚姻吉祥"},
+      "震-巽": {"name": "雷风恒", "unicode": "䷟", "meaning": "恒久不变，坚持正道"},
+      "乾-艮": {"name": "天山遁", "unicode": "䷠", "meaning": "退避隐遁，明哲保身"},
+      "震-乾": {"name": "雷天大壮", "unicode": "䷡", "meaning": "阳刚强盛，宜戒骄躁"},
+      "离-坤": {"name": "火地晋", "unicode": "䷢", "meaning": "日出地上，光明进取"},
+      "坤-离": {"name": "地火明夷", "unicode": "䷣", "meaning": "光明受损，韬光养晦"},
+      "巽-离": {"name": "风火家人", "unicode": "䷤", "meaning": "家庭和睦，齐家之道"},
+      "离-兑": {"name": "火泽睽", "unicode": "䷥", "meaning": "乖违背离，异中求同"},
+      "坎-艮": {"name": "水山蹇", "unicode": "䷦", "meaning": "行路艰难，止而待时"},
+      "震-坎": {"name": "雷水解", "unicode": "䷧", "meaning": "解除困厄，雷雨作解"},
+      "艮-兑": {"name": "山泽损", "unicode": "䷨", "meaning": "损下益上，损己利人"},
+      "巽-震": {"name": "风雷益", "unicode": "䷩", "meaning": "损上益下，利有攸往"},
+      "兑-乾": {"name": "泽天夬", "unicode": "䷪", "meaning": "决断刚健，扬善去恶"},
+      "乾-巽": {"name": "天风姤", "unicode": "䷫", "meaning": "邂逅相遇，戒于渐进"},
+      "兑-坤": {"name": "泽地萃", "unicode": "䷬", "meaning": "聚集荟萃，顺天应人"},
+      "坤-巽": {"name": "地风升", "unicode": "䷭", "meaning": "积小成大，渐进上升"},
+      "兑-坎": {"name": "泽水困", "unicode": "䷮", "meaning": "困境之中，守正待变"},
+      "坎-巽": {"name": "水风井", "unicode": "䷯", "meaning": "养民济世，取用不竭"},
+      "兑-离": {"name": "泽火革", "unicode": "䷰", "meaning": "变革更新，顺天应时"},
+      "离-巽": {"name": "火风鼎", "unicode": "䷱", "meaning": "鼎新革故，养贤育德"},
+      "震-震": {"name": "震为雷", "unicode": "䷲", "meaning": "震动惊惧，慎行自省"},
+      "艮-艮": {"name": "艮为山", "unicode": "䷳", "meaning": "止而能止，知止不殆"},
+      "巽-艮": {"name": "风山渐", "unicode": "䷴", "meaning": "循序渐进，女归吉祥"},
+      "震-兑": {"name": "雷泽归妹", "unicode": "䷵", "meaning": "归妹待嫁，行事宜缓"},
+      "震-离": {"name": "雷火丰", "unicode": "䷶", "meaning": "丰盛充裕，宜保守成"},
+      "离-艮": {"name": "火山旅", "unicode": "䷷", "meaning": "旅途之象，小心谨慎"},
+      "巽-巽": {"name": "巽为风", "unicode": "䷸", "meaning": "风行草偃，顺从进退"},
+      "兑-兑": {"name": "兑为泽", "unicode": "䷹", "meaning": "和悦交流，利于言说"},
+      "巽-坎": {"name": "风水涣", "unicode": "䷺", "meaning": "涣散离析，宜聚不宜散"},
+      "坎-兑": {"name": "水泽节", "unicode": "䷻", "meaning": "节制有度，中正吉祥"},
+      "巽-兑": {"name": "风泽中孚", "unicode": "䷼", "meaning": "诚信感化，中心诚信"},
+      "震-艮": {"name": "雷山小过", "unicode": "䷽", "meaning": "小事可过，大事不宜"},
+      "坎-离": {"name": "水火既济", "unicode": "䷾", "meaning": "万事已成，守成为要"},
+      "离-坎": {"name": "火水未济", "unicode": "䷿", "meaning": "事未完成，继续努力"}
+    }
+  },
+  
+  "tiyong_analysis": {
+    "description": "体用综合分析规则",
+    "rules": [
+      {"ti": "吉", "yong": "吉", "result": "大吉", "desc": "体用皆吉，大富大贵，一生顺遂"},
+      {"ti": "吉", "yong": "凶", "result": "中平", "desc": "怀才不遇，需待时而动，中年后转运"},
+      {"ti": "凶", "yong": "吉", "result": "中平", "desc": "有才无运，或富贵不长久，宜稳健"},
+      {"ti": "凶", "yong": "凶", "result": "大凶", "desc": "多灾多难，宜守不宜攻，韬光养晦"}
+    ]
+  }
+}

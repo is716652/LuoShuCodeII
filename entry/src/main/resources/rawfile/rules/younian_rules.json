@@ -1,0 +1,128 @@
+{
+  "stars": [
+    {"name": "生气", "element": "木", "luck": "大吉", "desc": "生机勃勃，事业财运双旺，精力充沛"},
+    {"name": "天医", "element": "土", "luck": "中吉", "desc": "祛病延年，贵人相助，身体健康"},
+    {"name": "延年", "element": "金", "luck": "小吉", "desc": "感情和睦，人际和谐，家庭圆满"},
+    {"name": "伏位", "element": "木", "luck": "小吉", "desc": "平稳安定，蓄势待发，原本状态"},
+    {"name": "绝命", "element": "金", "luck": "大凶", "desc": "破败损丁，意外灾祸，顽疾难愈"},
+    {"name": "五鬼", "element": "火", "luck": "次凶", "desc": "口舌官非，火灾失窃，小人作祟"},
+    {"name": "六煞", "element": "水", "luck": "小凶", "desc": "桃花纠纷，反复无常，不务正业"},
+    {"name": "祸害", "element": "土", "luck": "小凶", "desc": "身体虚弱，破财琐事，运势低迷"}
+  ],
+  "directions": {
+    "坎": "北",
+    "艮": "东北",
+    "震": "东",
+    "巽": "东南",
+    "离": "南",
+    "坤": "西南",
+    "兑": "西",
+    "乾": "西北"
+  },
+  "rules": [
+    {
+      "gua": "乾",
+      "relations": [
+        {"target": "坎", "star": "六煞", "direction": "北"},
+        {"target": "艮", "star": "天医", "direction": "东北"},
+        {"target": "震", "star": "五鬼", "direction": "东"},
+        {"target": "巽", "star": "祸害", "direction": "东南"},
+        {"target": "离", "star": "绝命", "direction": "南"},
+        {"target": "坤", "star": "延年", "direction": "西南"},
+        {"target": "兑", "star": "生气", "direction": "西"},
+        {"target": "乾", "star": "伏位", "direction": "西北"}
+      ]
+    },
+    {
+      "gua": "坤",
+      "relations": [
+        {"target": "坎", "star": "绝命", "direction": "北"},
+        {"target": "艮", "star": "生气", "direction": "东北"},
+        {"target": "震", "star": "祸害", "direction": "东"},
+        {"target": "巽", "star": "五鬼", "direction": "东南"},
+        {"target": "离", "star": "六煞", "direction": "南"},
+        {"target": "坤", "star": "伏位", "direction": "西南"},
+        {"target": "兑", "star": "天医", "direction": "西"},
+        {"target": "乾", "star": "延年", "direction": "西北"}
+      ]
+    },
+    {
+      "gua": "坎",
+      "relations": [
+        {"target": "坎", "star": "伏位", "direction": "北"},
+        {"target": "艮", "star": "五鬼", "direction": "东北"},
+        {"target": "震", "star": "天医", "direction": "东"},
+        {"target": "巽", "star": "生气", "direction": "东南"},
+        {"target": "离", "star": "延年", "direction": "南"},
+        {"target": "坤", "star": "绝命", "direction": "西南"},
+        {"target": "兑", "star": "祸害", "direction": "西"},
+        {"target": "乾", "star": "六煞", "direction": "西北"}
+      ]
+    },
+    {
+      "gua": "离",
+      "relations": [
+        {"target": "坎", "star": "延年", "direction": "北"},
+        {"target": "艮", "star": "祸害", "direction": "东北"},
+        {"target": "震", "star": "生气", "direction": "东"},
+        {"target": "巽", "star": "天医", "direction": "东南"},
+        {"target": "离", "star": "伏位", "direction": "南"},
+        {"target": "坤", "star": "六煞", "direction": "西南"},
+        {"target": "兑", "star": "五鬼", "direction": "西"},
+        {"target": "乾", "star": "绝命", "direction": "西北"}
+      ]
+    },
+    {
+      "gua": "震",
+      "relations": [
+        {"target": "坎", "star": "天医", "direction": "北"},
+        {"target": "艮", "star": "延年", "direction": "东北"},
+        {"target": "震", "star": "伏位", "direction": "东"},
+        {"target": "巽", "star": "六煞", "direction": "东南"},
+        {"target": "离", "star": "生气", "direction": "南"},
+        {"target": "坤", "star": "祸害", "direction": "西南"},
+        {"target": "兑", "star": "绝命", "direction": "西"},
+        {"target": "乾", "star": "五鬼", "direction": "西北"}
+      ]
+    },
+    {
+      "gua": "艮",
+      "relations": [
+        {"target": "坎", "star": "五鬼", "direction": "北"},
+        {"target": "艮", "star": "伏位", "direction": "东北"},
+        {"target": "震", "star": "延年", "direction": "东"},
+        {"target": "巽", "star": "绝命", "direction": "东南"},
+        {"target": "离", "star": "祸害", "direction": "南"},
+        {"target": "坤", "star": "生气", "direction": "西南"},
+        {"target": "兑", "star": "六煞", "direction": "西"},
+        {"target": "乾", "star": "天医", "direction": "西北"}
+      ]
+    },
+    {
+      "gua": "巽",
+      "relations": [
+        {"target": "坎", "star": "生气", "direction": "北"},
+        {"target": "艮", "star": "绝命", "direction": "东北"},
+        {"target": "震", "star": "六煞", "direction": "东"},
+        {"target": "巽", "star": "伏位", "direction": "东南"},
+        {"target": "离", "star": "天医", "direction": "南"},
+        {"target": "坤", "star": "五鬼", "direction": "西南"},
+        {"target": "兑", "star": "延年", "direction": "西"},
+        {"target": "乾", "star": "祸害", "direction": "西北"}
+      ]
+    },
+    {
+      "gua": "兑",
+      "relations": [
+        {"target": "坎", "star": "祸害", "direction": "北"},
+        {"target": "艮", "star": "六煞", "direction": "东北"},
+        {"target": "震", "star": "绝命", "direction": "东"},
+        {"target": "巽", "star": "延年", "direction": "东南"},
+        {"target": "离", "star": "五鬼", "direction": "南"},
+        {"target": "坤", "star": "天医", "direction": "西南"},
+        {"target": "兑", "star": "伏位", "direction": "西"},
+        {"target": "乾", "star": "生气", "direction": "西北"}
+      ]
+    }
+  ]
+}

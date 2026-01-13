@@ -1,0 +1,10 @@
+[
+  { "gua": "坤", "fan_gua": "乾", "fan_element": "金", "trigger_gan": ["壬"], "trigger_zhi": ["申", "戌", "亥"], "desc": "坤反壬申戌亥乾金" },
+  { "gua": "兑", "fan_gua": "艮", "fan_element": "土", "trigger_gan": ["丙"], "trigger_zhi": ["丑", "寅"], "desc": "兑反丙丑寅艮" },
+  { "gua": "坎", "fan_gua": "离", "fan_element": "火", "trigger_gan": [], "trigger_zhi": ["巳", "午"], "desc": "坎反巳午离火" },
+  { "gua": "乾", "fan_gua": "坤", "fan_element": "土", "trigger_gan": ["乙", "癸"], "trigger_zhi": ["未", "申"], "desc": "乾反乙癸未申坤" },
+  { "gua": "艮", "fan_gua": "兑", "fan_element": "金", "trigger_gan": ["丁"], "trigger_zhi": ["酉"], "desc": "艮反丁酉兑金" },
+  { "gua": "震", "fan_gua": "巽", "fan_element": "木", "trigger_gan": ["辛"], "trigger_zhi": ["辰", "巳"], "desc": "震反辛辰巳巽" },
+  { "gua": "巽", "fan_gua": "震", "fan_element": "木", "trigger_gan": ["庚"], "trigger_zhi": ["卯"], "desc": "巽反庚卯震" },
+  { "gua": "离", "fan_gua": "坎", "fan_element": "水", "trigger_gan": ["戊"], "trigger_zhi": ["子"], "desc": "离反戊子坎水" }
+]

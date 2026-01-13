@@ -1,0 +1,10 @@
+[
+  { "gua": "艮", "number": 8, "element": "土", "dizhi": ["丑", "寅"], "desc": "生年得之大吉" },
+  { "gua": "巽", "number": 4, "element": "木", "dizhi": ["辰", "巳"], "desc": "生年得之大吉" },
+  { "gua": "坎", "number": 1, "element": "水", "dizhi": ["子"], "desc": "生年得之大吉" },
+  { "gua": "离", "number": 9, "element": "火", "dizhi": ["午"], "desc": "生年得之大吉" },
+  { "gua": "乾", "number": 6, "element": "金", "dizhi": ["戌", "亥"], "desc": "生年得之大吉" },
+  { "gua": "坤", "number": 2, "element": "土", "dizhi": ["未", "申"], "desc": "生年得之大吉" },
+  { "gua": "兑", "number": 7, "element": "金", "dizhi": ["酉"], "desc": "生年得之大吉" },
+  { "gua": "震", "number": 3, "element": "木", "dizhi": ["卯"], "desc": "生年得之大吉" }
+]
