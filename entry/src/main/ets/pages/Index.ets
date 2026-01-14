@@ -21,7 +21,9 @@ import {
   LiuRiGuaInfo,
   XiaoXiangResult,
   NaJiaPanResult,
-  YaoWithNaJia
+  YaoWithNaJia,
+  PaipanRecord,
+  TermExplanation
 } from '../model/HeluoModels';
 import { BaguaChart, GuaDetailDialog, GuaInfo, BAGUA_DATA } from '../components/BaguaChart';
 import { YouNianChart } from '../components/YouNianChart';
@@ -30,6 +32,7 @@ import { ZhengTongGuaChart } from '../components/ZhengTongGuaChart';
 import { NianGanGuaChart } from '../components/NianGanGuaChart';
 import { TiYongAnalysis } from '../components/TiYongAnalysis';
 import { XiangDangChart } from '../components/XiangDangChart';
+import { StorageUtil } from '../utils/StorageUtil';
 
 // 农历月份名称
 const LUNAR_MONTHS: string[] = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'];
@@ -111,12 +114,24 @@ struct Index {
   @State xiaoXiangResult: XiaoXiangResult = new XiaoXiangResult();
   @State naJiaPan: NaJiaPanResult = new NaJiaPanResult();
 
+  // 历史记录相关
+  @State historyList: PaipanRecord[] = [];
+  @State showHistoryDialog: boolean = false;
+
+  // 术语解释相关
+  @State showTermDialog: boolean = false;
+  @State selectedTerm: TermExplanation | null = null;
+
   private heluoService: HeluoService | null = null;
   private guaDialogController: CustomDialogController | null = null;
 
   aboutToAppear(): void {
     this.heluoService = new HeluoService(getContext(this));
     this.heluoService.initialize();
+    // 初始化存储工具
+    StorageUtil.init(getContext(this));
+    // 加载历史记录
+    this.loadHistory();
   }
 
   async doAnalyze(): Promise<void> {
@@ -217,6 +232,9 @@ struct Index {
         }
       }
       this.hasResult = true;
+
+      // 保存到历史记录
+      await this.saveToHistory();
     } catch (e) {
       this.errorMsg = '分析失败，请检查日期是否有效';
     } finally {
@@ -266,8 +284,67 @@ struct Index {
     }
   }
 
+  // ========== 历史记录相关方法 ==========
+
+  // 加载历史记录
+  async loadHistory(): Promise<void> {
+    this.historyList = await StorageUtil.getHistory();
+  }
+
+  // 保存当前排盘到历史
+  async saveToHistory(): Promise<void> {
+    if (!this.analysis || !this.analysis.calendar || !this.analysis.benMing) {
+      return;
+    }
+
+    const record = new PaipanRecord();
+    record.id = Date.now().toString();
+    record.gender = this.selectedGender === 0 ? '男' : '女';
+    record.birthYear = this.selectedYear;
+    record.birthMonth = this.selectedMonth;
+    record.birthDay = this.selectedDay;
+    record.shichenIndex = this.selectedShichen;
+    record.lunarDate = `${this.analysis.calendar.lunar_year}年${this.getLunarMonthName(this.analysis.calendar.lunar_month)}月${this.getLunarDayName(this.analysis.calendar.lunar_day)}`;
+    record.benMingGua = this.analysis.benMing.gua;
+    record.createTime = Date.now();
+    record.name = `${record.gender}·${this.selectedYear}年${this.selectedMonth}月${this.selectedDay}日`;
+
+    await StorageUtil.saveHistory(record);
+    await this.loadHistory();
+  }
+
+  // 删除单条历史记录
+  async deleteHistory(id: string): Promise<void> {
+    await StorageUtil.deleteHistory(id);
+    await this.loadHistory();
+  }
+
+  // 加载历史记录
+  loadHistoryRecord(record: PaipanRecord): void {
+    this.selectedGender = record.gender === '男' ? 0 : 1;
+    this.selectedYear = record.birthYear;
+    this.selectedMonth = record.birthMonth;
+    this.selectedDay = record.birthDay;
+    this.selectedShichen = record.shichenIndex;
+    this.showHistoryDialog = false;
+    this.doAnalyze();
+  }
+
+  // ========== 术语解释相关方法 ==========
+
+  // 显示术语解释
+  async showTermExplanation(term: string): Promise<void> {
+    if (!this.heluoService) return;
+    const explanation = await this.heluoService.getTermExplanation(term);
+    if (explanation) {
+      this.selectedTerm = explanation;
+      this.showTermDialog = true;
+    }
+  }
+
   build() {
-    Column() {
+    Stack() {
+      Column() {
       // 顶部标题栏
       Row() {
         Text('☰')
@@ -281,10 +358,29 @@ struct Index {
         Text('☷')
           .fontSize(20)
           .fontColor('#D4AF37')
+
+        Blank()
+
+        // 历史记录按钮
+        Row() {
+          Text('📜')
+            .fontSize(18)
+            .margin({ right: 4 })
+          Text('历史')
+            .fontSize(14)
+            .fontColor('#8B7355')
+        }
+        .padding({ left: 10, right: 10, top: 6, bottom: 6 })
+        .backgroundColor('#FFF9F0')
+        .borderRadius(16)
+        .onClick(() => {
+          this.showHistoryDialog = true;
+        })
+        .margin({ right: 12 })
       }
       .width('100%')
       .height(56)
-      .justifyContent(FlexAlign.Center)
+      .padding({ left: 12, right: 12 })
       .backgroundColor('#FFFEF9')
       .border({ width: { bottom: 1 }, color: '#E8DCC8' })
 
@@ -1411,6 +1507,49 @@ struct Index {
       backgroundColor: '#FFFEF9',
       showClose: true
     })
+
+      // 历史记录弹窗
+      if (this.showHistoryDialog) {
+        Column() {
+          Column() {
+            this.HistoryDialogSheet()
+          }
+          .width('90%')
+          .backgroundColor('#FFFEF9')
+          .borderRadius(16)
+          .shadow({ radius: 20, color: '#00000030' })
+        }
+        .width('100%')
+        .height('100%')
+        .backgroundColor('#00000080')
+        .justifyContent(FlexAlign.Center)
+        .onClick(() => {
+          this.showHistoryDialog = false;
+        })
+      }
+
+      // 术语解释弹窗
+      if (this.showTermDialog) {
+        Column() {
+          Column() {
+            this.TermDialogSheet()
+          }
+          .width('90%')
+          .backgroundColor('#FFFEF9')
+          .borderRadius(16)
+          .shadow({ radius: 20, color: '#00000030' })
+        }
+        .width('100%')
+        .height('100%')
+        .backgroundColor('#00000080')
+        .justifyContent(FlexAlign.Center)
+        .onClick(() => {
+          this.showTermDialog = false;
+        })
+      }
+    }
+    .width('100%')
+    .height('100%')
   }
 
   @Builder
@@ -1665,5 +1804,194 @@ struct Index {
       ['兑', '兑卦统领丁天干。酉是秋分前后的月份，代表正西，是兑卦的本位。兑为泽，对应洛书"七赤"星，五行属金，故取数7。']
     ]);
     return principles.get(guaName) || '暂无详细说明';
+  }
+
+  @Builder
+  HistoryDialogSheet() {
+    Column() {
+      // 标题
+      Text('📜 排盘历史')
+        .fontSize(20)
+        .fontWeight(FontWeight.Bold)
+        .fontColor('#8B0000')
+        .margin({ bottom: 16 })
+
+      if (this.historyList.length === 0) {
+        Column() {
+          Text('📄')
+            .fontSize(48)
+            .margin({ bottom: 12 })
+          Text('暂无历史记录')
+            .fontSize(14)
+            .fontColor('#8B7355')
+        }
+        .width('100%')
+        .height(200)
+        .justifyContent(FlexAlign.Center)
+      } else {
+        Scroll() {
+          Column() {
+            ForEach(this.historyList, (item: PaipanRecord) => {
+              Column() {
+                Row() {
+                  Column() {
+                    Text(item.name)
+                      .fontSize(15)
+                      .fontColor('#4A3728')
+                      .fontWeight(FontWeight.Medium)
+                    Text(`${item.lunarDate} · ${SHICHEN_NAMES[item.shichenIndex]}时`)
+                      .fontSize(12)
+                      .fontColor('#8B7355')
+                      .margin({ top: 4 })
+                    Text(`元气：${item.benMingGua}卦`)
+                      .fontSize(12)
+                      .fontColor('#D4AF37')
+                      .margin({ top: 4 })
+                  }
+                  .alignItems(HorizontalAlign.Start)
+                  .layoutWeight(1)
+
+                  Column() {
+                    Button('加载')
+                      .fontSize(12)
+                      .width(50)
+                      .height(28)
+                      .backgroundColor('#8B7355')
+                      .onClick(() => {
+                        this.loadHistoryRecord(item);
+                      })
+                    Button('删除')
+                      .fontSize(12)
+                      .width(50)
+                      .height(28)
+                      .backgroundColor('#CD853F')
+                      .margin({ top: 6 })
+                      .onClick(() => {
+                        this.deleteHistory(item.id);
+                      })
+                  }
+                }
+                .width('100%')
+                .padding(14)
+                .backgroundColor('#FFFEF9')
+                .borderRadius(10)
+                .border({ width: 1, color: '#E8DCC8' })
+              }
+              .width('100%')
+              .margin({ bottom: 10 })
+            })
+          }
+        }
+        .width('100%')
+        .height(400)
+      }
+    }
+    .width('100%')
+    .padding(20)
+  }
+
+  @Builder
+  TermDialogSheet() {
+    Column() {
+      if (this.selectedTerm) {
+        // 标题
+        Text(`📖 ${this.selectedTerm.term}`)
+          .fontSize(20)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#8B0000')
+          .margin({ bottom: 12 })
+
+        Scroll() {
+          Column() {
+            // 分类
+            Row() {
+              Text(`【${this.selectedTerm.category}】`)
+                .fontSize(12)
+                .fontColor('#FFFFFF')
+                .backgroundColor('#D4AF37')
+                .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+                .borderRadius(4)
+            }
+            .width('100%')
+            .margin({ bottom: 12 })
+
+            // 简述
+            Text(this.selectedTerm.shortDesc)
+              .fontSize(14)
+              .fontColor('#8B7355')
+              .lineHeight(22)
+              .margin({ bottom: 16 })
+
+            Divider().color('#E8DCC8').margin({ bottom: 16 })
+
+            // 详细解释
+            Column() {
+              Text('详细解释：')
+                .fontSize(14)
+                .fontColor('#D4AF37')
+                .fontWeight(FontWeight.Medium)
+                .margin({ bottom: 8 })
+              Text(this.selectedTerm.detailDesc)
+                .fontSize(14)
+                .fontColor('#4A3728')
+                .lineHeight(24)
+            }
+            .width('100%')
+            .alignItems(HorizontalAlign.Start)
+            .margin({ bottom: 16 })
+
+            // 举例
+            if (this.selectedTerm.example) {
+              Column() {
+                Text('举例说明：')
+                  .fontSize(14)
+                  .fontColor('#D4AF37')
+                  .fontWeight(FontWeight.Medium)
+                  .margin({ bottom: 8 })
+                Text(this.selectedTerm.example)
+                  .fontSize(13)
+                  .fontColor('#8B7355')
+                  .lineHeight(22)
+                  .backgroundColor('#FFF9F0')
+                  .padding(12)
+                  .borderRadius(8)
+              }
+              .width('100%')
+              .alignItems(HorizontalAlign.Start)
+              .margin({ bottom: 16 })
+            }
+
+            // 相关术语
+            if (this.selectedTerm.relatedTerms.length > 0) {
+              Column() {
+                Text('相关术语：')
+                  .fontSize(14)
+                  .fontColor('#D4AF37')
+                  .fontWeight(FontWeight.Medium)
+                  .margin({ bottom: 8 })
+                Flex({ wrap: FlexWrap.Wrap }) {
+                  ForEach(this.selectedTerm.relatedTerms, (relatedTerm: string) => {
+                    Text(relatedTerm)
+                      .fontSize(12)
+                      .fontColor('#8B7355')
+                      .backgroundColor('#FFFEF9')
+                      .padding({ left: 10, right: 10, top: 6, bottom: 6 })
+                      .borderRadius(12)
+                      .border({ width: 1, color: '#E8DCC8' })
+                      .margin({ right: 8, bottom: 8 })
+                  })
+                }
+              }
+              .width('100%')
+              .alignItems(HorizontalAlign.Start)
+            }
+          }
+        }
+        .width('100%')
+        .height(500)
+      }
+    }
+    .width('100%')
+    .padding(20)
   }
 }

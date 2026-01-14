@@ -37,7 +37,8 @@ import {
   YaoWithNaJia,
   NaJiaPanResult,
   NaJiaGongRule,
-  GuaShiYingRule
+  GuaShiYingRule,
+  TermExplanation
 } from '../model/HeluoModels';
 
 // 卦象符号映射
@@ -104,6 +105,8 @@ export class HeluoService {
   private naJiaLoaded: boolean = false;
   private guaShiYingLoaded: boolean = false;
   private liuQinLoaded: boolean = false;
+  private termExplanations: Map<string, TermExplanation> = new Map();
+  private termLoaded: boolean = false;
 
   constructor(context: Context) {
     this.context = context;
@@ -878,6 +881,54 @@ export class HeluoService {
     }
 
     return result;
+  }
+
+  // ========== 术语解释系统 ==========
+
+  // 加载术语解释规则
+  private async loadTermExplanations(): Promise<void> {
+    if (this.termLoaded) {
+      return;
+    }
+    try {
+      const data = await this.loadRawFile('rules/term_explanations.json');
+      const parsed = JSON.parse(data) as Record<string, Object>;
+      const terms = parsed['terms'] as object[] || [];
+
+      for (const item of terms) {
+        const obj = item as Record<string, Object>;
+        const term = new TermExplanation();
+        term.term = obj['term'] as string || '';
+        term.category = obj['category'] as string || '';
+        term.shortDesc = obj['shortDesc'] as string || '';
+        term.detailDesc = obj['detailDesc'] as string || '';
+        term.example = obj['example'] as string || '';
+        term.relatedTerms = obj['relatedTerms'] as string[] || [];
+        this.termExplanations.set(term.term, term);
+      }
+      this.termLoaded = true;
+      console.info('术语解释规则加载完成，共', this.termExplanations.size, '条');
+    } catch (e) {
+      console.error('加载术语解释规则失败:', JSON.stringify(e));
+    }
+  }
+
+  // 获取术语解释
+  async getTermExplanation(term: string): Promise<TermExplanation | null> {
+    await this.loadTermExplanations();
+    return this.termExplanations.get(term) || null;
+  }
+
+  // 获取所有术语列表（按分类）
+  async getAllTerms(): Promise<Map<string, TermExplanation[]>> {
+    await this.loadTermExplanations();
+    const categoryMap: Map<string, TermExplanation[]> = new Map();
+    this.termExplanations.forEach((term: TermExplanation) => {
+      const list = categoryMap.get(term.category) || [];
+      list.push(term);
+      categoryMap.set(term.category, list);
+    });
+    return categoryMap;
   }
 
   // ========== 求数法 ==========

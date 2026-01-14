@@ -430,3 +430,32 @@ export class GuaShiYingRule {
   shiYao: number = 0;           // 世爻位
   yingYao: number = 0;          // 应爻位
 }
+
+// ========== 历史记录相关模型 ==========
+
+// 排盘历史记录
+export class PaipanRecord {
+  id: string = '';                      // 唯一ID（时间戳）
+  name: string = '';                    // 记录名称（可选，用户自定义）
+  gender: string = '';                  // 性别：男/女
+  birthYear: number = 0;                // 阳历年
+  birthMonth: number = 0;               // 阳历月
+  birthDay: number = 0;                 // 阳历日
+  shichenIndex: number = 0;             // 时辰索引
+  lunarDate: string = '';               // 农历日期（保存供显示）
+  benMingGua: string = '';              // 本命卦名
+  createTime: number = 0;               // 创建时间戳
+  remark: string = '';                  // 备注
+}
+
+// ========== 术语解释相关模型 ==========
+
+// 术语解释条目
+export class TermExplanation {
+  term: string = '';                    // 术语名称
+  category: string = '';                // 分类：基础/定性/定量/流年
+  shortDesc: string = '';               // 简短说明（一句话）
+  detailDesc: string = '';              // 详细解释
+  example: string = '';                 // 举例说明
+  relatedTerms: string[] = [];          // 相关术语
+}
