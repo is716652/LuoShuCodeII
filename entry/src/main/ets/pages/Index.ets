@@ -19,7 +19,9 @@ import {
   YuanTangInfo,
   LiuYueGuaInfo,
   LiuRiGuaInfo,
-  XiaoXiangResult
+  XiaoXiangResult,
+  NaJiaPanResult,
+  YaoWithNaJia
 } from '../model/HeluoModels';
 import { BaguaChart, GuaDetailDialog, GuaInfo, BAGUA_DATA } from '../components/BaguaChart';
 import { YouNianChart } from '../components/YouNianChart';
@@ -102,11 +104,12 @@ struct Index {
   // 八卦相荡法相关
   @State xiangDangResult: XiangDangResult = new XiangDangResult();
 
-  // 定元堂式、起月卦、起日卦相关
+  // 定元堂式、起月卦、起日卦、六亲纳甲相关
   @State yuanTangInfo: YuanTangInfo = new YuanTangInfo();
   @State liuYueGuaList: LiuYueGuaInfo[] = [];
   @State liuRiGua: LiuRiGuaInfo = new LiuRiGuaInfo();
   @State xiaoXiangResult: XiaoXiangResult = new XiaoXiangResult();
+  @State naJiaPan: NaJiaPanResult = new NaJiaPanResult();
 
   private heluoService: HeluoService | null = null;
   private guaDialogController: CustomDialogController | null = null;
@@ -150,7 +153,7 @@ struct Index {
         );
         this.tiYongResult = this.heluoService.analyzeTiYong(this.zhengTongGua, this.nianGanGua);
 
-        // 八卦相荡法分析（推演未查10年流年）
+        // 八卦相荡法分析（推演未来10年流年）
         const currentYear = new Date().getFullYear();
         this.xiangDangResult = await this.heluoService.analyzeXiangDang(
           this.zhengTongGua,
@@ -159,6 +162,18 @@ struct Index {
           currentYear,
           10
         );
+
+        // 六亲纳甲：对当前流年卦装六亲、定世应、查旺衰
+        this.naJiaPan = new NaJiaPanResult();
+        if (this.xiangDangResult.currentLiuNian && this.xiangDangResult.currentLiuNian.liuNianGua &&
+          this.xiangDangResult.currentLiuNian.liuNianGua.name !== '') {
+          this.naJiaPan = await this.heluoService.analyzeNaJiaForGua(
+            this.xiangDangResult.currentLiuNian.liuNianGua.name,
+            this.analysis.calendar.day_gan,
+            this.analysis.calendar.month_zhi,
+            this.analysis.calendar.solar_term || ''
+          );
+        }
 
         // 定元堂式：根据本命卦和时辰定元堂
         if (this.zhengTongGua.mingGua.name !== '') {
@@ -1100,6 +1115,120 @@ struct Index {
               .margin({ top: 12, left: 12, right: 12 })
             }
 
+            // 六亲纳甲表格 - 当前流年卦六亲旺衰
+            if (this.naJiaPan.yaoList.length > 0) {
+              Column() {
+                Row() {
+                  Divider()
+                    .vertical(true)
+                    .height(16)
+                    .strokeWidth(3)
+                    .color('#2F4F4F')
+                    .margin({ right: 8 })
+                  Text('六亲纳甲 · 流年六爻旺衰')
+                    .fontSize(16)
+                    .fontWeight(FontWeight.Medium)
+                    .fontColor('#4A3728')
+                }
+                .width('100%')
+                .margin({ bottom: 12 })
+
+                Text(`流年卦「${this.naJiaPan.guaName}」，属「${this.naJiaPan.gong}宫」，${this.getNaJiaTypeName(this.naJiaPan.type)}；世爻在「${this.getYaoName(this.naJiaPan.shiYao)}」，应爻在「${this.getYaoName(this.naJiaPan.yingYao)}」`)
+                  .fontSize(12)
+                  .fontColor('#8B7355')
+                  .margin({ bottom: 8 })
+
+                // 表头
+                Row() {
+                  Text('爻位')
+                    .fontSize(12)
+                    .fontColor('#8B7355')
+                    .layoutWeight(1)
+                  Text('纳支')
+                    .fontSize(12)
+                    .fontColor('#8B7355')
+                    .layoutWeight(1)
+                  Text('天干')
+                    .fontSize(12)
+                    .fontColor('#8B7355')
+                    .layoutWeight(1)
+                  Text('五行')
+                    .fontSize(12)
+                    .fontColor('#8B7355')
+                    .layoutWeight(1)
+                  Text('六亲')
+                    .fontSize(12)
+                    .fontColor('#8B7355')
+                    .layoutWeight(1.2)
+                  Text('世/应')
+                    .fontSize(12)
+                    .fontColor('#8B7355')
+                    .layoutWeight(1)
+                  Text('旺衰')
+                    .fontSize(12)
+                    .fontColor('#8B7355')
+                    .layoutWeight(1.2)
+                }
+                .width('100%')
+                .padding({ top: 6, bottom: 6, left: 8, right: 8 })
+                .backgroundColor('#FFF9F0')
+                .borderRadius(6)
+
+                // 六爻明细，从上爻到初爻
+                Column() {
+                  ForEach(this.naJiaPan.yaoList.slice().reverse(), (item: YaoWithNaJia) => {
+                    Row() {
+                      Text(this.getYaoName(item.index))
+                        .fontSize(13)
+                        .fontColor('#4A3728')
+                        .layoutWeight(1)
+                      Text(item.zhi)
+                        .fontSize(13)
+                        .fontColor('#4A3728')
+                        .layoutWeight(1)
+                      Text(item.gan)
+                        .fontSize(13)
+                        .fontColor('#4A3728')
+                        .layoutWeight(1)
+                      Text(item.element)
+                        .fontSize(13)
+                        .fontColor('#4A3728')
+                        .layoutWeight(1)
+                      Text(item.liuQin || '-')
+                        .fontSize(13)
+                        .fontColor(this.getLiuQinColor(item.liuQin))
+                        .layoutWeight(1.2)
+                      Text(item.isShi ? '世' : item.isYing ? '应' : '')
+                        .fontSize(13)
+                        .fontColor(item.isShi || item.isYing ? '#8B0000' : '#8B7355')
+                        .layoutWeight(1)
+                      Text(item.wangShuai || '')
+                        .fontSize(13)
+                        .fontColor(this.getWangShuaiColor(item.wangShuai))
+                        .layoutWeight(1.2)
+                    }
+                    .width('100%')
+                    .padding({ top: 4, bottom: 4, left: 8, right: 8 })
+                  })
+                }
+                .width('100%')
+                .backgroundColor('#FFFEF9')
+                .borderRadius(6)
+                .margin({ top: 4 })
+
+                Text('以日干为我，六爻纳甲为用：同我为兄弟，我生为子孙，生我为父母，我克为妻财，克我为官鬼；再结合节气旺衰判断每一爻的发力轻重。')
+                  .fontSize(12)
+                  .fontColor('#8B7355')
+                  .margin({ top: 10 })
+                  .lineHeight(18)
+              }
+              .width('100%')
+              .padding(16)
+              .backgroundColor('#FFFEF9')
+              .borderRadius(12)
+              .margin({ top: 12, left: 12, right: 12 })
+            }
+
             // 小象行年 - 当前岁数运势
             if (this.xiaoXiangResult.age > 0) {
               Column() {
@@ -1379,6 +1508,53 @@ struct Index {
       ['祸害', '此方位主耗损，身体易走弱。不宜在此方进行健康相关活动，防小人。']
     ]);
     return advices.get(starName) || '暂无详细建议';
+  }
+
+  getYaoName(index: number): string {
+    const names: string[] = ['初爻', '二爻', '三爻', '四爻', '五爻', '上爻'];
+    if (index >= 1 && index <= 6) {
+      return names[index - 1];
+    }
+    return '';
+  }
+
+  getNaJiaTypeName(type: string): string {
+    switch (type) {
+      case 'pure':
+        return '八纯卦';
+      case 'one_shi':
+        return '一世卦';
+      case 'two_shi':
+        return '二世卦';
+      case 'three_shi':
+        return '三世卦';
+      case 'four_shi':
+        return '四世卦';
+      case 'five_shi':
+        return '五世卦';
+      case 'you_hun':
+        return '游魂卦';
+      case 'gui_hun':
+        return '归魂卦';
+      default:
+        return '';
+    }
+  }
+
+  getLiuQinColor(liuQin: string): string {
+    if (liuQin === '官鬼') return '#B22222';
+    if (liuQin === '妻财') return '#8B4513';
+    if (liuQin === '子孙') return '#228B22';
+    if (liuQin === '父母') return '#1E90FF';
+    if (liuQin === '兄弟') return '#4A3728';
+    return '#4A3728';
+  }
+
+  getWangShuaiColor(type: string): string {
+    if (type === '生助' || type === '比助') return '#228B22';
+    if (type === '克制') return '#B22222';
+    if (type === '克财' || type === '泄耗') return '#CD853F';
+    return '#4A3728';
   }
 
   @Builder

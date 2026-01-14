@@ -1,0 +1,69 @@
+{
+  "description": "八宫纳甲规则（宫 → 六爻地支/天干）",
+  "gong_rules": [
+    {
+      "gong": "乾",
+      "gong_gua_name": "乾为天",
+      "element": "金",
+      "gong_gan": "壬",
+      "yao_zhi_seq": ["子", "寅", "辰", "午", "申", "戌"],
+      "yao_gan_seq": ["甲", "壬", "甲", "壬", "甲", "壬"]
+    },
+    {
+      "gong": "兑",
+      "gong_gua_name": "兑为泽",
+      "element": "金",
+      "gong_gan": "丁",
+      "yao_zhi_seq": ["巳", "卯", "丑", "亥", "酉", "未"],
+      "yao_gan_seq": ["丁", "乙", "丁", "乙", "丁", "乙"]
+    },
+    {
+      "gong": "离",
+      "gong_gua_name": "离为火",
+      "element": "火",
+      "gong_gan": "己",
+      "yao_zhi_seq": ["卯", "丑", "亥", "酉", "未", "巳"],
+      "yao_gan_seq": ["己", "己", "己", "己", "己", "己"]
+    },
+    {
+      "gong": "震",
+      "gong_gua_name": "震为雷",
+      "element": "木",
+      "gong_gan": "庚",
+      "yao_zhi_seq": ["子", "寅", "辰", "午", "申", "戌"],
+      "yao_gan_seq": ["庚", "庚", "庚", "庚", "庚", "庚"]
+    },
+    {
+      "gong": "巽",
+      "gong_gua_name": "巽为风",
+      "element": "木",
+      "gong_gan": "辛",
+      "yao_zhi_seq": ["丑", "亥", "酉", "未", "巳", "卯"],
+      "yao_gan_seq": ["辛", "辛", "辛", "辛", "辛", "辛"]
+    },
+    {
+      "gong": "坎",
+      "gong_gua_name": "坎为水",
+      "element": "水",
+      "gong_gan": "戊",
+      "yao_zhi_seq": ["寅", "辰", "午", "申", "戌", "子"],
+      "yao_gan_seq": ["戊", "戊", "戊", "戊", "戊", "戊"]
+    },
+    {
+      "gong": "艮",
+      "gong_gua_name": "艮为山",
+      "element": "土",
+      "gong_gan": "丙",
+      "yao_zhi_seq": ["辰", "午", "申", "戌", "子", "寅"],
+      "yao_gan_seq": ["丙", "丙", "丙", "丙", "丙", "丙"]
+    },
+    {
+      "gong": "坤",
+      "gong_gua_name": "坤为地",
+      "element": "土",
+      "gong_gan": "癸",
+      "yao_zhi_seq": ["未", "巳", "卯", "丑", "亥", "酉"],
+      "yao_gan_seq": ["癸", "乙", "癸", "乙", "癸", "乙"]
+    }
+  ]
+}

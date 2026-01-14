@@ -1,0 +1,10 @@
+{
+  "description": "以日干五行为参照，爻五行关系映射六亲",
+  "liuqin_by_relation": [
+    { "relation": "tong_wo", "label": "同我", "liuqin": "兄弟" },
+    { "relation": "wo_sheng", "label": "我生", "liuqin": "子孙" },
+    { "relation": "sheng_wo", "label": "生我", "liuqin": "父母" },
+    { "relation": "ke_wo", "label": "克我", "liuqin": "官鬼" },
+    { "relation": "wo_ke", "label": "我克", "liuqin": "妻财" }
+  ]
+}

@@ -33,7 +33,11 @@ import {
   LiuYueGuaInfo,
   LiuRiGuaInfo,
   XiaoXiangResult,
-  XiaoXiangData
+  XiaoXiangData,
+  YaoWithNaJia,
+  NaJiaPanResult,
+  NaJiaGongRule,
+  GuaShiYingRule
 } from '../model/HeluoModels';
 
 // 卦象符号映射
@@ -94,6 +98,12 @@ export class HeluoService {
   private calendarCache: Map<string, CalendarData[]> = new Map();
   private younianStars: YouNianStar[] = [];
   private younianRules: Map<string, YouNianRelation[]> = new Map();
+  private naJiaGongRules: Map<string, NaJiaGongRule> = new Map();
+  private guaShiYingMap: Map<string, GuaShiYingRule> = new Map();
+  private liuQinMap: Map<string, string> = new Map();
+  private naJiaLoaded: boolean = false;
+  private guaShiYingLoaded: boolean = false;
+  private liuQinLoaded: boolean = false;
 
   constructor(context: Context) {
     this.context = context;
@@ -695,6 +705,176 @@ export class HeluoService {
           result.xiongList.push(rel);
         }
       }
+    }
+
+    return result;
+  }
+
+  // ========== 六亲纳甲系统 ==========
+
+  // 加载八宫纳甲规则
+  private async loadNaJiaRules(): Promise<void> {
+    if (this.naJiaLoaded) {
+      return;
+    }
+    try {
+      const data = await this.loadRawFile('rules/najia_rules.json');
+      const parsed = JSON.parse(data) as Record<string, Object>;
+      const gongRules = parsed['gong_rules'] as object[] || [];
+      for (const item of gongRules) {
+        const obj = item as Record<string, Object>;
+        const gong = obj['gong'] as string;
+        if (!gong) {
+          continue;
+        }
+        const rule = new NaJiaGongRule();
+        rule.gong = gong;
+        rule.gongGuaName = obj['gong_gua_name'] as string || '';
+        rule.element = obj['element'] as string || '';
+        rule.gongGan = obj['gong_gan'] as string || '';
+        rule.yaoZhiSeq = obj['yao_zhi_seq'] as string[] || [];
+        rule.yaoGanSeq = obj['yao_gan_seq'] as string[] || [];
+        this.naJiaGongRules.set(gong, rule);
+      }
+      this.naJiaLoaded = true;
+    } catch (e) {
+      console.error('加载纳甲规则失败:', JSON.stringify(e));
+    }
+  }
+
+  // 加载卦世应规则
+  private async loadGuaShiYingRules(): Promise<void> {
+    if (this.guaShiYingLoaded) {
+      return;
+    }
+    try {
+      const data = await this.loadRawFile('rules/gua_shiying_rules.json');
+      const parsed = JSON.parse(data) as Record<string, Object>;
+      const rules = parsed['gua_shiying'] as object[] || [];
+      for (const item of rules) {
+        const obj = item as Record<string, Object>;
+        const name = obj['name'] as string;
+        if (!name) {
+          continue;
+        }
+        const rule = new GuaShiYingRule();
+        rule.name = name;
+        rule.gong = obj['gong'] as string || '';
+        rule.type = obj['type'] as string || '';
+        rule.shiYao = obj['shi_yao'] as number || 0;
+        rule.yingYao = obj['ying_yao'] as number || 0;
+        this.guaShiYingMap.set(name, rule);
+      }
+      this.guaShiYingLoaded = true;
+    } catch (e) {
+      console.error('加载卦世应规则失败:', JSON.stringify(e));
+    }
+  }
+
+  // 加载六亲规则
+  private async loadLiuQinRules(): Promise<void> {
+    if (this.liuQinLoaded) {
+      return;
+    }
+    try {
+      const data = await this.loadRawFile('rules/liuqin_rules.json');
+      const parsed = JSON.parse(data) as Record<string, Object>;
+      const list = parsed['liuqin_by_relation'] as object[] || [];
+      for (const item of list) {
+        const obj = item as Record<string, Object>;
+        const relationKey = obj['relation'] as string;
+        const liuQin = obj['liuqin'] as string;
+        if (relationKey && liuQin) {
+          this.liuQinMap.set(relationKey, liuQin);
+        }
+      }
+      this.liuQinLoaded = true;
+    } catch (e) {
+      console.error('加载六亲规则失败:', JSON.stringify(e));
+    }
+  }
+
+  // 计算五行关系对应的六亲关系编码
+  private getLiuQinRelationKey(myElement: string, yaoElement: string): string {
+    if (!myElement || !yaoElement) {
+      return '';
+    }
+    // 同我
+    if (myElement === yaoElement) {
+      return 'tong_wo';
+    }
+    // 我生
+    if (WUXING_SHENG.get(myElement) === yaoElement) {
+      return 'wo_sheng';
+    }
+    // 生我
+    if (WUXING_SHENG.get(yaoElement) === myElement) {
+      return 'sheng_wo';
+    }
+    // 我克
+    if (WUXING_KE.get(myElement) === yaoElement) {
+      return 'wo_ke';
+    }
+    // 克我
+    if (WUXING_KE.get(yaoElement) === myElement) {
+      return 'ke_wo';
+    }
+    return '';
+  }
+
+  // 卦的六亲纳甲盘（可用于本命卦或流年卦）
+  async analyzeNaJiaForGua(
+    guaName: string,
+    riGan: string,
+    monthZhi: string,
+    solarTerm: string
+  ): Promise<NaJiaPanResult> {
+    await this.loadNaJiaRules();
+    await this.loadGuaShiYingRules();
+    await this.loadLiuQinRules();
+
+    const result = new NaJiaPanResult();
+    result.guaName = guaName;
+
+    const guaRule = this.guaShiYingMap.get(guaName);
+    if (!guaRule) {
+      return result;
+    }
+    result.gong = guaRule.gong;
+    result.type = guaRule.type;
+    result.shiYao = guaRule.shiYao;
+    result.yingYao = guaRule.yingYao;
+
+    const gongRule = this.naJiaGongRules.get(result.gong);
+    if (!gongRule) {
+      return result;
+    }
+
+    const myElement = this.getGanElement(riGan);
+    const seasonElement = this.getSeasonElement(solarTerm, monthZhi);
+
+    result.yaoList = [];
+    for (let i = 0; i < 6; i++) {
+      const yao = new YaoWithNaJia();
+      yao.index = i + 1;
+      yao.zhi = gongRule.yaoZhiSeq[i] || '';
+      yao.gan = gongRule.yaoGanSeq[i] || '';
+      yao.element = this.getZhiElement(yao.zhi);
+
+      const relKey = this.getLiuQinRelationKey(myElement, yao.element);
+      if (relKey) {
+        yao.liuQin = this.liuQinMap.get(relKey) || '';
+      } else {
+        yao.liuQin = '';
+      }
+
+      yao.isShi = result.shiYao === yao.index;
+      yao.isYing = result.yingYao === yao.index;
+
+      const wangResult = this.getWuxingRelation(yao.element, seasonElement);
+      yao.wangShuai = wangResult.type;
+
+      result.yaoList.push(yao);
     }
 
     return result;
@@ -1564,9 +1744,7 @@ export class HeluoService {
     return `今日动爻在${yao}爻，日常事务可进行`;
   }
 
-  // ========== 小象行年卦气 ==========
 
-  // 小象行年：推算流年运势的爻位和小象辞
   calculateXiaoXiang(
     yuanTangYao: number, // 元堂爻位(1-6)
     age: number,         // 虚岁年龄

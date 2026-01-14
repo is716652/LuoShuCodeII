@@ -389,3 +389,44 @@ export class XiaoXiangData {
   luck: string = '';            // 吉凶
   advice: string = '';          // 建议
 }
+
+// 六爻纳甲明细
+export class YaoWithNaJia {
+  index: number = 0;            // 爻位(1-6)
+  zhi: string = '';             // 纳甲地支
+  gan: string = '';             // 对应天干
+  element: string = '';         // 爻五行
+  liuQin: string = '';          // 六亲
+  isShi: boolean = false;       // 是否世爻
+  isYing: boolean = false;      // 是否应爻
+  wangShuai: string = '';       // 旺衰/五行关系类型
+}
+
+// 纳甲盘结果
+export class NaJiaPanResult {
+  guaName: string = '';         // 卦名
+  gong: string = '';            // 所属宫
+  type: string = '';            // 卦类（八纯/一世/二世/三世/四世/五世/游魂/归魂）
+  shiYao: number = 0;           // 世爻位
+  yingYao: number = 0;          // 应爻位
+  yaoList: YaoWithNaJia[] = []; // 六爻纳甲结果
+}
+
+// 八宫纳甲规则（宫级）
+export class NaJiaGongRule {
+  gong: string = '';            // 宫名：乾、兑、离、震、巽、坎、艮、坤
+  gongGuaName: string = '';     // 宫卦名称：乾为天等
+  element: string = '';         // 宫五行
+  gongGan: string = '';         // 宫干
+  yaoZhiSeq: string[] = [];     // 六爻纳地支（初到上）
+  yaoGanSeq: string[] = [];     // 六爻天干（初到上）
+}
+
+// 卦对应宫位与世应规则
+export class GuaShiYingRule {
+  name: string = '';            // 卦名
+  gong: string = '';            // 所属宫
+  type: string = '';            // 卦类：pure/one_shi/two_shi/three_shi/four_shi/five_shi/you_hun/gui_hun
+  shiYao: number = 0;           // 世爻位
+  yingYao: number = 0;          // 应爻位
+}
